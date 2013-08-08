@@ -1,0 +1,36 @@
+*** Settings ***
+
+Resource  resource.txt
+Test Setup  Open Browser  ${SERVER}  ${BROWSER}
+Test Teardown  Close Browser
+
+*** Variables ***
+
+${EMAIL}       %{EVENT_CREATOR_TEST_EMAIL}
+${PASSWORD}    %{EVENT_CREATOR_TEST_EMAIL_PASSWORD}
+
+*** Test Cases ***
+
+# User logs in to Google account, then add some event.
+# Then list of events is retrieved and user deletes
+# just added event.
+Add And Get And Delete Event
+    Login And Authorize User    ${EMAIL}   ${PASSWORD}
+    Page Should Not Contain  Some summary
+    Page Should Not Contain  June 23, 2013, 2:30 p.m.
+    Page Should Not Contain  June 23, 2013, 5:30 p.m.
+    Click Link  Add event
+    Wait Until Page Contains Element    id_summary
+    Input Text  id_summary  Some summary
+    Wait Until Page Contains Element    id_start
+    Input Text  id_start  06/23/2013 14:30
+    Wait Until Page Contains Element    id_end
+    Input Text  id_end    06/23/2013 17:30
+    Click Button  Submit
+    Page Should Contain  Some summary
+    Page Should Contain  June 23, 2013, 2:30 p.m.
+    Page Should Contain  June 23, 2013, 5:30 p.m.
+    Click Link  Delete
+    Page Should Not Contain  Some summary
+    Page Should Not Contain  June 23, 2013, 2:30 p.m.
+    Page Should Not Contain  June 23, 2013, 5:30 p.m.

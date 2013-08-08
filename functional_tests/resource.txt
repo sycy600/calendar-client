@@ -1,0 +1,29 @@
+*** Settings ***
+
+Library  Selenium2Library
+
+*** Variables ***
+
+${SERVER}  http://localhost:${PORT}/
+${BROWSER}  firefox
+
+*** Keywords ***
+
+Login And Authorize User   [Arguments]  ${email}  ${password}
+    Login User   ${email}   ${password}
+    Authorize User
+    
+Login User  [Arguments]  ${email}  ${password}
+    Click Link  Login
+    Sleep   2s
+    Input Text  Email  ${email}
+    Input Text  Passwd  ${password}
+    Click Button  signIn
+    
+Authorize User
+    Wait Until Page Contains Element    submit_approve_access
+    Click Button  submit_approve_access
+    
+Dont Authorize User
+    Wait Until Page Contains Element    submit_deny_access
+    Click Button  submit_deny_access

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+{% load rfc3339_to_datetime %}
+{% if not user.is_authenticated %}
+    Please login to see your events.
+{% else %}
+    <p><a href="/add_event/">Add event</a></p>
+    <table>
+    <tr><th>Summary</th><th>Start</th><th>End</th><th>Actions</th></tr>
+    
+    {% for event in events %}
+        <tr><td>{{ event.summary }}</td><td>{{ event.start.dateTime | rfc3339_to_datetime }}</td><td>{{ event.end.dateTime | rfc3339_to_datetime }}</td><td><a href="/delete_event/{{ event.id }}">Delete</a></td></tr>
+    {% endfor %}
+    
+    </table>
+{% endif %}
+{% endblock %}

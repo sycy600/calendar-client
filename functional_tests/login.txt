@@ -1,0 +1,42 @@
+*** Settings ***
+
+Resource  resource.txt
+Test Setup  Open Browser  ${SERVER}  ${BROWSER}
+Test Teardown  Close Browser
+
+*** Variables ***
+
+${EMAIL}       %{EVENT_CREATOR_TEST_EMAIL}
+${PASSWORD}    %{EVENT_CREATOR_TEST_EMAIL_PASSWORD}
+
+*** Test Cases ***
+
+# User logs in to Google account, authorizes profile and
+# calendar access. At the end user is logged in and
+# redirected to index page.
+Normal Login Flow
+    Page Should Not Contain  Logout
+    Page Should Contain  Login
+    Login And Authorize User    ${EMAIL}   ${PASSWORD}
+    Page Should Contain  Logout
+    Page Should Not Contain  Login
+    
+# User logs in to Google account but doesn't authorize
+# profile and calendar access. User will not be logged in.
+Not Authorized Login Flow
+    Login User   ${EMAIL}   ${PASSWORD}
+    Dont Authorize User
+    Page Should Contain  Access denied
+    Go To   ${SERVER}
+    Page Should Not Contain  Logout
+    Page Should Contain  Login
+
+# Log in and log out user.    
+Logout
+    Login And Authorize User    ${EMAIL}   ${PASSWORD}
+    Page Should Contain  Logout
+    Page Should Not Contain  Login
+    Click Link  Logout
+    Page Should Not Contain  Logout
+    Page Should Contain  Login
+
