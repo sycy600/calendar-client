@@ -22,4 +22,4 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Django admin CSS files are licensed under:
-https://raw.github.com/django/django/master/LICENSE
+https://github.com/django/django/blob/stable/1.5.x/LICENSE
