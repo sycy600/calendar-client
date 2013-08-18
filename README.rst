@@ -1,4 +1,4 @@
-The application which works with Google OAuth2 and with Calendar API.
+An application which works with Google OAuth2 and with Calendar API.
 
 Run
 ===
