@@ -37,8 +37,7 @@ def check_credentials(function):
             if credentials is None or credentials.invalid:
                 return redirect(reverse("event_creator.views.oauth2redirect"))
         try:
-            value_to_return = function(request, *args, **kwargs)
-            return value_to_return
+            return function(request, *args, **kwargs)
         except AccessTokenRefreshError:
             return redirect(reverse("event_creator.views.oauth2redirect"))
     return wrap
