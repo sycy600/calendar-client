@@ -26,4 +26,5 @@ Authorize User
     
 Dont Authorize User
     Wait Until Page Contains Element    submit_deny_access
+    Sleep   2s
     Click Button  submit_deny_access
