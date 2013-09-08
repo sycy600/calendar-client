@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
-from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.client import OAuth2WebServerFlow, AccessTokenRefreshError
 
 OAUTH_REDIRECT_URI = settings.OAUTH_REDIRECT_BASE + "/oauth2callback"
 OAUTH_SCOPES = ('https://www.googleapis.com/auth/calendar '
@@ -36,5 +36,8 @@ def check_credentials(function):
             credentials = user_profile.get_credentials()
             if credentials is None or credentials.invalid:
                 return redirect(reverse("event_creator.views.oauth2redirect"))
-        return function(request, *args, **kwargs)
+        try:
+            return function(request, *args, **kwargs)
+        except AccessTokenRefreshError:
+            return redirect(reverse("event_creator.views.oauth2redirect"))
     return wrap
